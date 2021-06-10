@@ -11,94 +11,104 @@ const {
  * GET all users
  */
 router.get("/", async (req, res) => {
-  console.log(await getAllUsers());
-  // const { error, data } = getAllUsers();
-
-  // if (error) {
-  //   return res.status(400).json({
-  //     success: false,
-  //     payload: data,
-  //   });
-  // }
-  // return res.json({
-  //   success: true,
-  //   payload: data,
-  // });
+  try {
+    const result = await getAllUsers();
+    return res.json({
+      success: true,
+      payload: result,
+    });
+  } catch (err) {
+    return res.status(400).json({
+      success: false,
+      payload: err.message,
+    });
+  }
 });
 
 /**
  * GET user by id
  */
-router.get("/:id", (req, res) => {
-  const { error, data } = getUserById(req.params.id);
+router.get("/:id", async (req, res) => {
+  try {
+    const result = await getUserById(req.params.id);
 
-  if (error) {
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        payload: "404 Not Found",
+      });
+    }
+
+    return res.json({
+      success: true,
+      payload: result,
+    });
+  } catch (err) {
     return res.status(400).json({
       success: false,
-      payload: data,
+      payload: err.message,
     });
   }
-  return res.json({
-    success: true,
-    payload: data,
-  });
 });
 
 /**
  * POST add new user
  */
-router.post("/", (req, res) => {
-  const { error, data } = addNewUser(req.body);
-
-  if (error) {
+router.post("/", async (req, res) => {
+  try {
+    const result = await addNewUser(req.body);
+    return res.json({
+      success: true,
+      payload: result,
+    });
+  } catch (err) {
     return res.status(400).json({
       success: false,
-      payload: data,
+      payload: err.message,
     });
   }
-
-  return res.json({
-    success: true,
-    payload: data,
-  });
 });
 
 /**
  * PATCH update user by id
  */
-router.patch("/:id", (req, res) => {
-  const { error, data } = updateUserById(req.params.id, req.body);
-
-  if (error) {
+router.patch("/:id", async (req, res) => {
+  try {
+    const result = await updateUserById(req.params.id, req.body);
+    return res.json({
+      success: true,
+      payload: result,
+    });
+  } catch (err) {
     return res.status(400).json({
       success: false,
-      payload: data,
+      payload: err.message,
     });
   }
-
-  return res.json({
-    success: true,
-    payload: data,
-  });
 });
 
 /**
  * DELETE user by id
  */
-router.delete("/:id", (req, res) => {
-  const { error, data } = deleteUserById(req.params.id);
-
-  if (error) {
+router.delete("/:id", async (req, res) => {
+  try {
+    const result = await deleteUserById(req.params.id);
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        payload: `No user deleted for id ${req.params.id}`,
+      });
+    }
+    return res.json({
+      success: true,
+      payload: result,
+    });
+  } catch (err) {
     return res.status(400).json({
       success: false,
       payload: data,
     });
   }
-
-  return res.json({
-    success: true,
-    payload: data,
-  });
 });
 
 module.exports = router;

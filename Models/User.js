@@ -4,22 +4,16 @@ const db = require("../database/database");
  * Query to get all users (GET)
  */
 const getAllUsers = () => {
-  console.log(db);
   const query = "SELECT * FROM users";
   const params = [];
 
-  db.all(query, params, (err, rows) => {
-    console.log({ rows, err });
-    if (err) {
-      return {
-        error: true,
-        data: err.message,
-      };
-    }
-    return {
-      error: false,
-      data: rows,
-    };
+  return new Promise((resolve, reject) => {
+    db.all(query, params, (err, rows) => {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(rows);
+    });
   });
 };
 
@@ -30,46 +24,33 @@ const getUserById = (id) => {
   const query = "SELECT * FROM users where id = ?";
   const params = [id];
 
-  db.get(query, params, (err, rows) => {
-    if (err) {
-      return {
-        error: true,
-        data: err.message,
-      };
-    }
-    return {
-      error: false,
-      data: rows,
-    };
+  return new Promise((resolve, reject) => {
+    db.get(query, params, (err, row) => {
+      if (err) {
+        return reject(err);
+      }
+
+      return resolve(row);
+    });
   });
 };
 
 /**
  * Add new user (POST)
  */
-const addNewUser = (user = null) => {
-  if (!user) {
-    return {
-      error: true,
-      data: "no user data",
-    };
-  }
-
+const addNewUser = (user) => {
   const query =
-    "INSERT INTO users (email, givenName, familyName, created) VALUES ????";
+    "INSERT INTO users (email, givenName, familyName, created) VALUES (?,?,?,?)";
   const params = [user.email, user.givenName, user.familyName, "now"];
 
-  db.run(query, params, (err, result) => {
-    if (err) {
-      return {
-        error: true,
-        data: err.message,
-      };
-    }
-    return {
-      error: false,
-      data: result,
-    };
+  return new Promise((resolve, reject) => {
+    db.run(query, params, function (err) {
+      if (err) {
+        return reject(err);
+      }
+      console.log();
+      return resolve(this.lastID);
+    });
   });
 };
 
@@ -77,32 +58,28 @@ const addNewUser = (user = null) => {
  * Update user by id
  */
 const updateUserById = (id = null, data = null) => {
-  if (!id || !data) {
-    return {
-      error: true,
-      data: "no user data",
-    };
-  }
-
-  const query = `UPDATE users 
+  console.log(data);
+  const query = `UPDATE users set
                     email = COALESCE(?,email),
                     givenName = COALESCE(?,givenName),
                     familyName = COALESCE(?,familyName),
                     created = COALESCE(?,created)
                     WHERE id = ?`;
-  const params = [data.email, data.givenName, data.familyName, data.created];
+  const params = [
+    data.email,
+    data.givenName,
+    data.familyName,
+    data.created,
+    id,
+  ];
 
-  db.run(query, params, (err, result) => {
-    if (err) {
-      return {
-        error: true,
-        data: err.message,
-      };
-    }
-    return {
-      success: true,
-      data: result,
-    };
+  return new Promise((resolve, reject) => {
+    db.run(query, params, function (err) {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(this.changes);
+    });
   });
 };
 
@@ -110,28 +87,16 @@ const updateUserById = (id = null, data = null) => {
  * Delete user by id
  */
 const deleteUserById = (id = null) => {
-  if (!id) {
-    return {
-      error: true,
-      data: "no user data",
-    };
-  }
-
   const query = `DELETE FROM users WHERE id = ?`;
   const params = [id];
 
-  db.run(query, params, (err, result) => {
-    if (err) {
-      return {
-        error: true,
-        data: err.message,
-      };
-    }
-
-    return {
-      success: true,
-      data: result,
-    };
+  return new Promise((resolve, reject) => {
+    db.run(query, params, function (err) {
+      if (err) {
+        return reject(err);
+      }
+      return resolve(this.changes);
+    });
   });
 };
 

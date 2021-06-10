@@ -16,6 +16,10 @@ let db = new sqlite3.Database("./database/data.db", (err) => {
   createUsersTable();
 });
 
+/**
+ * Create users table
+ * Will insert a default row on creation.
+ */
 const createUsersTable = () => {
   const query = `CREATE TABLE users (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
