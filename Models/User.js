@@ -41,7 +41,12 @@ const getUserById = (id) => {
 const addNewUser = (user) => {
   const query =
     "INSERT INTO users (email, givenName, familyName, created) VALUES (?,?,?,?)";
-  const params = [user.email, user.givenName, user.familyName, "now"];
+  const params = [
+    user.email,
+    user.givenName,
+    user.familyName,
+    new Date().toUTCString(),
+  ];
 
   return new Promise((resolve, reject) => {
     db.run(query, params, function (err) {
@@ -63,13 +68,13 @@ const updateUserById = (id = null, data = null) => {
                     email = COALESCE(?,email),
                     givenName = COALESCE(?,givenName),
                     familyName = COALESCE(?,familyName),
-                    created = COALESCE(?,created)
+                    updated = ?
                     WHERE id = ?`;
   const params = [
     data.email,
     data.givenName,
     data.familyName,
-    data.created,
+    new Date().toUTCString(),
     id,
   ];
 

@@ -26,7 +26,8 @@ const createUsersTable = () => {
                 email text,
                 givenName TEXT,
                 familyName TEXT,
-                created TEXT
+                created TEXT,
+                updated TEXT
               )`;
 
   db.run(query, (err) => {
@@ -36,10 +37,16 @@ const createUsersTable = () => {
     }
 
     // Insert default row
-    const query = `INSERT INTO users (email, givenName, familyName, created)
-                  VALUES (?,?,?,?)`;
+    const query = `INSERT INTO users (email, givenName, familyName, created, updated)
+                  VALUES (?,?,?,?,?)`;
 
-    db.run(query, ["email@email.com", "Joe", "Bloggs", "10/06/21 21:40"]);
+    db.run(query, [
+      "email@email.com",
+      "Joe",
+      "Bloggs",
+      new Date().toUTCString(),
+      "",
+    ]);
   });
 };
 
