@@ -10,19 +10,20 @@ const {
 /**
  * GET all users
  */
-router.get("/", (req, res) => {
-  const { error, data } = getAllUsers();
+router.get("/", async (req, res) => {
+  console.log(await getAllUsers());
+  // const { error, data } = getAllUsers();
 
-  if (error) {
-    return res.status(400).json({
-      success: false,
-      payload: data,
-    });
-  }
-  return res.json({
-    success: true,
-    payload: data,
-  });
+  // if (error) {
+  //   return res.status(400).json({
+  //     success: false,
+  //     payload: data,
+  //   });
+  // }
+  // return res.json({
+  //   success: true,
+  //   payload: data,
+  // });
 });
 
 /**

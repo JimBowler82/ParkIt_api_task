@@ -4,10 +4,12 @@ const db = require("../database/database");
  * Query to get all users (GET)
  */
 const getAllUsers = () => {
+  console.log(db);
   const query = "SELECT * FROM users";
   const params = [];
 
   db.all(query, params, (err, rows) => {
+    console.log({ rows, err });
     if (err) {
       return {
         error: true,
