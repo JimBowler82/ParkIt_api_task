@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const validateRequest = require("../middleware/validate-body");
 const {
   getAllUsers,
   getUserById,
@@ -54,7 +55,7 @@ router.get("/:id", async (req, res) => {
 /**
  * POST add new user
  */
-router.post("/", async (req, res) => {
+router.post("/", validateRequest, async (req, res) => {
   try {
     const result = await addNewUser(req.body);
     return res.json({
@@ -72,7 +73,7 @@ router.post("/", async (req, res) => {
 /**
  * PATCH update user by id
  */
-router.patch("/:id", async (req, res) => {
+router.patch("/:id", validateRequest, async (req, res) => {
   try {
     const result = await updateUserById(req.params.id, req.body);
     return res.json({

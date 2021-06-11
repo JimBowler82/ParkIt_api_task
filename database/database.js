@@ -3,8 +3,8 @@ const sqlite3 = require("sqlite3").verbose();
 /**
  * Create sqlite database
  * Options:
- *  :memory:,
- *  file - requires path.
+ *  in memory = ":memory:",
+ *  file = "./database/data.db"
  */
 let db = new sqlite3.Database("./database/data.db", (err) => {
   if (err) {

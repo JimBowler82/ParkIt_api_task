@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 
 // Require Routers
-const userRouter = require("./routes/users");
+const userRouter = require("./routes/users-router");
 
 // Middleware
 app.use(cors());

@@ -53,7 +53,7 @@ const addNewUser = (user) => {
       if (err) {
         return reject(err);
       }
-      console.log();
+
       return resolve(this.lastID);
     });
   });
@@ -62,8 +62,7 @@ const addNewUser = (user) => {
 /**
  * Update user by id
  */
-const updateUserById = (id = null, data = null) => {
-  console.log(data);
+const updateUserById = (id, data) => {
   const query = `UPDATE users set
                     email = COALESCE(?,email),
                     givenName = COALESCE(?,givenName),
@@ -91,7 +90,7 @@ const updateUserById = (id = null, data = null) => {
 /**
  * Delete user by id
  */
-const deleteUserById = (id = null) => {
+const deleteUserById = (id) => {
   const query = `DELETE FROM users WHERE id = ?`;
   const params = [id];
 
