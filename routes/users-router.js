@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
 router.post("/", validateRequest, async (req, res) => {
   try {
     const result = await addNewUser(req.body);
-    return res.json({
+    return res.status(201).json({
       success: true,
       payload: result,
     });

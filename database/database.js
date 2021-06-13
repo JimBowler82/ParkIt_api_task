@@ -6,7 +6,7 @@ const sqlite3 = require("sqlite3").verbose();
  *  in memory = ":memory:",
  *  file = "./database/data.db"
  */
-let db = new sqlite3.Database("./database/data.db", (err) => {
+let db = new sqlite3.Database(":memory:", (err) => {
   if (err) {
     // Connection failed
     return console.error(err.message);
